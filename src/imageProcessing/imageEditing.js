@@ -101,7 +101,7 @@ export const rotateImage = async (args) => {
 export const blurImage = async (args) => {
   try {
     await sharp(`./image/inputImage/${args?.img}`)
-      .blur(4)
+      .blur(args?.blur_amount)
       .toFile(`./image/outputImage/blur_image${args?.img}`);
   } catch (error) {
     console.log(error);
@@ -174,7 +174,6 @@ export const overlayImage = async (args) => {
   }
 };
 
-
 // Flip image
 export const flipImage = async (args) => {
   try {
@@ -186,13 +185,73 @@ export const flipImage = async (args) => {
   }
 };
 
-
 // Flop image
 export const flopImage = async (args) => {
   try {
     await sharp(`./image/inputImage/${args?.img}`)
       .flop()
       .toFile(`./image/outputImage/flop_image${args?.img}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Affine image
+export const affineImage = async (args) => {
+  try {
+    await sharp(`./image/inputImage/${args?.img}`)
+      .affine(
+        [
+          [args?.x1, args?.y1],
+          [args?.x2, args?.y2],
+        ],
+        {
+          background: args?.bg,
+          interpolate: sharp.interpolators.nohalo,
+        }
+      )
+      .toFile(`./image/outputImage/affine_image${args?.img}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Sharpen image
+export const sharpenImage = async (args) => {
+  try {
+    await sharp(`./image/inputImage/${args?.img}`)
+      .sharpen({
+        sigma: args?.sigma,
+        m1: args?.sharpen_m1,
+        m2: args?.sharpen_m2,
+        x1: args?.sharpen_x1,
+        y2: args?.sharpen_y2,
+        y3: args?.sharpen_y3,
+      })
+      .toFile(`./image/outputImage/sharpen_image${args?.img}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Median image
+export const medianImage = async (args) => {
+  try {
+    await sharp(`./image/inputImage/${args?.img_1}`)
+      .median(args?.median)
+      .toFile(`./image/outputImage/median_image${args?.img}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+// Flatten image
+export const flattenImage = async (args) => {
+  try {
+    await sharp(`./image/inputImage/${args?.background_img}`)
+      .flatten({ background: args?.bg_color })
+      .toFile(`./image/outputImage/flatten_image_${args?.img}`);
   } catch (error) {
     console.log(error);
   }
