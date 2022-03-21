@@ -1,17 +1,18 @@
 import  * as process from "./src/imageProcessing/imageEditing.js";
 
-const img= "test.jpg";
+const img= "raw.jpg";
 const width = 400;
 const height = 500;
-const left = 5;
-const top = 2;
-const bottom = 10;
-const right = 2;
+const left = 128;
+const top = 128;
+const bottom = 128;
+const right = 128;
 const deg = 90;
 const blur = 0.4;
 const background_img = "second_img.png";
 const text = "Rajib";
-const color = [255, 0, 0, 1]
+const color = [25, 226, 226, 1];
+const inside = 1;
 
 const args = {
     img,
@@ -25,7 +26,8 @@ const args = {
     blur,
     background_img,
     text,
-    color
+    color,
+    inside
 }
 
 // process.resizeImage(args);
@@ -35,4 +37,7 @@ const args = {
 // process.compositeImages(args);
 // process.addTextOnImage(args);
 // process.borderImage(args)
-process.overlayImage(args);
+// process.overlayImage(args);
+
+
+process.borderImage(args)

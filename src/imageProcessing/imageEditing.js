@@ -1,76 +1,112 @@
-import sharp from 'sharp';
+import sharp from "sharp";
 
-// Resize image 
+// get metadata
+export const getMetadata = async (args) => {
+  const metadata = await sharp(`./image/inputImage/${args?.img}`).metadata();
+
+  return metadata;
+};
+
+// Resize image
 export const resizeImage = async (args) => {
-
-    try {
-      await sharp(`./image/inputImage/${args?.img}`)
-        .resize({
-          width: args?.width,
-          height: args?.height
-        })
-        .toFile(`./image/outputImage/resize_image_${args?.img}`);
-    } catch (error) {
-      console.log(error);
-    }
-}
-
-
-// Border image 
-export const borderImage = async (args) => {
-
   try {
     await sharp(`./image/inputImage/${args?.img}`)
-    .extend({
-      top: args?.top,
-      bottom: args?.bottom,
-      left: args?.left,
-      right: args?.right,
-      background: { r: args?.color[0], g: args?.color[1], b: args?.color[2], alpha: args?.color[3] }
-    })
-      .toFile(`./image/outputImage/border_image_${args?.img}`);
+      .resize({
+        width: args?.width,
+        height: args?.height,
+      })
+      .toFile(`./image/outputImage/resize_image_${args?.img}`);
   } catch (error) {
     console.log(error);
   }
-}
+};
 
+// Border image
+export const borderImage = async (args) => {
+  if (args?.inside == 1) {
+    try {
+      getMetadata(args).then((res) => {
+        args.width = res.width - (args?.left + args?.right);
+        args.height = res.height - (args?.top + args?.bottom);
+
+        sharp(`./image/inputImage/${args?.img}`)
+          .resize({ width: args?.width, height: args?.height })
+          .extend({
+            top: args?.top,
+            bottom: args?.bottom,
+            left: args?.left,
+            right: args?.right,
+            background: {
+              r: args?.color[0],
+              g: args?.color[1],
+              b: args?.color[2],
+              alpha: args?.color[3],
+            },
+          })
+          .toFile(`./image/outputImage/border_image_${args?.img}`);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    try {
+      await sharp(`./image/inputImage/${args?.img}`)
+        .extend({
+          top: args?.top,
+          bottom: args?.bottom,
+          left: args?.left,
+          right: args?.right,
+          background: {
+            r: args?.color[0],
+            g: args?.color[1],
+            b: args?.color[2],
+            alpha: args?.color[3],
+          },
+        })
+        .toFile(`./image/outputImage/border_image_${args?.img}`);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 
 // Crop image
 export const cropImage = async (args) => {
-    try {
-      await sharp(`./image/inputImage/${args?.img}`)
-        .extract({ width: args?.width, height: args?.height, left: args?.left, top: args?.top  })
-        .toFile(`./image/outputImage/crop_image${args?.img}`);
-    } catch (error) {
-      console.log(error);
-    }
-}
-
-
+  try {
+    await sharp(`./image/inputImage/${args?.img}`)
+      .extract({
+        width: args?.width,
+        height: args?.height,
+        left: args?.left,
+        top: args?.top,
+      })
+      .toFile(`./image/outputImage/crop_image${args?.img}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // Rotate image
 export const rotateImage = async (args) => {
-    try {
-        await sharp(`./image/inputImage/${args?.img}`)
-        .rotate(args?.deg)
-        .toFile(`./image/outputImage/rotate_image${args?.img}`);
-    } catch (error) {
-      console.log(error);
-    }
-}
-
+  try {
+    await sharp(`./image/inputImage/${args?.img}`)
+      .rotate(args?.deg)
+      .toFile(`./image/outputImage/rotate_image${args?.img}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // Blur image
 export const blurImage = async (args) => {
-    try {
-        await sharp(`./image/inputImage/${args?.img}`)
-        .blur(4)
-        .toFile(`./image/outputImage/blur_image${args?.img}`);
-    } catch (error) {
-      console.log(error);
-    }
-}
-
+  try {
+    await sharp(`./image/inputImage/${args?.img}`)
+      .blur(4)
+      .toFile(`./image/outputImage/blur_image${args?.img}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // // Composite image
 // export const compositeImages = async (args) => {
@@ -89,12 +125,9 @@ export const blurImage = async (args) => {
 //     }
 // }
 
-
-
 // Add text on image
-export const addTextOnImage = async(args) => {
+export const addTextOnImage = async (args) => {
   try {
-
     const svgImage = `
     <svg width="${args?.width}" height="${args?.height}">
       <style>
@@ -116,29 +149,27 @@ export const addTextOnImage = async(args) => {
   } catch (error) {
     console.log(error);
   }
-}
-
+};
 
 // Composite image
 export const overlayImage = async (args) => {
   try {
-      await sharp(`./image/inputImage/${args?.background_img}`)
-
-  // .rotate(180)
-  // .resize(300)
-  .flatten( { background: '#FFFFFF' } )
-  .composite([
-    {
-      input: `./image/inputImage/${args?.img}`,
-      top: args?.top,
-      left: args.left,
-    },
-  ])
-  .sharpen()
-  .withMetadata()
-  .jpeg( { quality: 90 } )
+    await sharp(`./image/inputImage/${args?.background_img}`)
+      // .rotate(180)
+      // .resize(300)
+      .flatten({ background: "#FFFFFF" })
+      .composite([
+        {
+          input: `./image/inputImage/${args?.img}`,
+          top: args?.top,
+          left: args.left,
+        },
+      ])
+      .sharpen()
+      .withMetadata()
+      .jpeg({ quality: 90 })
       .toFile(`./image/outputImage/overlay_image${args?.img}`);
   } catch (error) {
     console.log(error);
   }
-}
+};
