@@ -173,3 +173,27 @@ export const overlayImage = async (args) => {
     console.log(error);
   }
 };
+
+
+// Flip image
+export const flipImage = async (args) => {
+  try {
+    await sharp(`./image/inputImage/${args?.img}`)
+      .flip()
+      .toFile(`./image/outputImage/flip_image${args?.img}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+// Flop image
+export const flopImage = async (args) => {
+  try {
+    await sharp(`./image/inputImage/${args?.img}`)
+      .flop()
+      .toFile(`./image/outputImage/flop_image${args?.img}`);
+  } catch (error) {
+    console.log(error);
+  }
+};

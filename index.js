@@ -39,5 +39,5 @@ const args = {
 // process.borderImage(args)
 // process.overlayImage(args);
 
-
-process.borderImage(args)
+// process.flipImage(args);
+process.flopImage(args);
