@@ -16,6 +16,25 @@ export const resizeImage = async (args) => {
 }
 
 
+// Border image 
+export const borderImage = async (args) => {
+
+  try {
+    await sharp(`./image/inputImage/${args?.img}`)
+    .extend({
+      top: args?.top,
+      bottom: args?.bottom,
+      left: args?.left,
+      right: args?.right,
+      background: { r: args?.color[0], g: args?.color[1], b: args?.color[2], alpha: args?.color[3] }
+    })
+      .toFile(`./image/outputImage/border_image_${args?.img}`);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
 // Crop image
 export const cropImage = async (args) => {
     try {
@@ -26,6 +45,7 @@ export const cropImage = async (args) => {
       console.log(error);
     }
 }
+
 
 
 // Rotate image
@@ -52,22 +72,22 @@ export const blurImage = async (args) => {
 }
 
 
-// Composite image
-export const compositeImages = async (args) => {
-    try {
-        await sharp(`./image/inputImage/${args?.background_img}`)
-        .composite([
-            {
-              input: `./image/inputImage/${args?.img}`,
-              top: args?.top,
-              left: args.left,
-            },
-          ])
-        .toFile(`./image/outputImage/composite_image${args?.img}`);
-    } catch (error) {
-      console.log(error);
-    }
-}
+// // Composite image
+// export const compositeImages = async (args) => {
+//     try {
+//         await sharp(`./image/inputImage/${args?.background_img}`)
+//         .composite([
+//             {
+//               input: `./image/inputImage/${args?.img}`,
+//               top: args?.top,
+//               left: args.left,
+//             },
+//           ])
+//         .toFile(`./image/outputImage/composite_image${args?.img}`);
+//     } catch (error) {
+//       console.log(error);
+//     }
+// }
 
 
 
@@ -98,3 +118,27 @@ export const addTextOnImage = async(args) => {
   }
 }
 
+
+// Composite image
+export const overlayImage = async (args) => {
+  try {
+      await sharp(`./image/inputImage/${args?.background_img}`)
+
+  // .rotate(180)
+  // .resize(300)
+  .flatten( { background: '#FFFFFF' } )
+  .composite([
+    {
+      input: `./image/inputImage/${args?.img}`,
+      top: args?.top,
+      left: args.left,
+    },
+  ])
+  .sharpen()
+  .withMetadata()
+  .jpeg( { quality: 90 } )
+      .toFile(`./image/outputImage/overlay_image${args?.img}`);
+  } catch (error) {
+    console.log(error);
+  }
+}
