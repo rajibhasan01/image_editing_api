@@ -27,6 +27,17 @@ const sharpen_m1 = 3;
 const sharpen_m2 = 5;
 const median = 3;
 const bg_color = "#F0A703";
+const contrast = false;
+const kernel_width = 3;
+const kernel_height = 3;
+const a = [0.3588, 0.7044, 0.1368];
+const b = [0.2990, 0.5870, 0.1140];
+const c = [0.2392, 0.4696, 0.0912];
+const brightness = 1;
+const hue = 250;
+const lightness = 50;
+const grayscale = true;
+const extractChannel = "blue";
 
 const args = {
     img,
@@ -55,7 +66,16 @@ const args = {
     sharpen_y2,
     sharpen_y3,
     median,
-    bg_color
+    bg_color,
+    contrast,
+    kernel_height,
+    kernel_width,
+    a,b,c,
+    brightness,
+    hue,
+    lightness,
+    grayscale,
+    extractChannel
 }
 
 // process.resizeImage(args);
@@ -72,3 +92,17 @@ const args = {
 // process.sharpenImage(args);
 // process.medianImage(args);
 // process.flattenImage(args);
+// process.normalizeImage(args);
+// process.claheImage(args);
+// process.convolveImage(args);
+// process.recombImage(args);
+// process.brightnessImage(args);
+// process.hueImage(args);
+// process.lightnessImage(args);
+// process.tintImage(args);
+// process.grayscaleImage(args);
+// process.extractChannelImage(args);
+// process.bandboolAndImage(args);
+// process.bandboolOrImage(args);
+// process.bandboolEorImage(args);
+
